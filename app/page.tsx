@@ -1,166 +1,357 @@
 "use client";
 
-import { useState } from "react";
-import type { FormEvent, ReactNode } from "react";
-import { motion, useScroll, useSpring } from "framer-motion";
+import Image from "next/image";
+import { useState, type FormEvent, type ReactNode } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import {
-  ArrowDownRight, ArrowRight, ArrowUpRight, Check, Code2, Globe2,
-  Menu, MousePointer2, Play, Search, Send, ShieldCheck, Sparkles,
-  Video, Workflow, X, MessageCircle
+  ArrowDownRight, ArrowRight, ArrowUpRight, Check, Code2, Search,
+  CalendarDays, Share2, Menu, X, MessageCircle, Send, Sparkles
 } from "lucide-react";
 
-const WA_NUMBER = "919567555020";
+const WHATSAPP_NUMBER = "919567555020";
 const EMAIL = "comestsd@gmail.com";
 
 const services = [
-  { no: "01", icon: Code2, title: "Website development", text: "Fast, refined websites built to turn first impressions into enquiries.", tags: ["Business websites", "Landing pages", "Web apps"] },
-  { no: "02", icon: Sparkles, title: "Brand & content", text: "A consistent digital identity, with content that sounds and feels like you.", tags: ["Content strategy", "Copywriting", "Creative direction"] },
-  { no: "03", icon: Search, title: "SEO & growth", text: "Make it easier for the right people to discover your business.", tags: ["Technical SEO", "On-page SEO", "Analytics"] },
-  { no: "04", icon: Video, title: "Social media", text: "Thoughtful, consistent content that earns attention and builds trust.", tags: ["Content calendars", "Reels", "Community management"] },
-  { no: "05", icon: Globe2, title: "E-commerce", text: "Product experiences that make browsing simple and buying effortless.", tags: ["Online stores", "Product pages", "Conversion UX"] },
-  { no: "06", icon: Workflow, title: "AI & automation", text: "Reduce repetitive work with practical workflows that give time back.", tags: ["Lead workflows", "Integrations", "Process automation"] },
+  {
+    number: "01",
+    title: "Web Development",
+    description: "Modern, responsive websites designed to turn visitors into customers.",
+    image: "/web-development.png",
+    alt: "Arquentra web development illustration showing responsive website design",
+    className: "lavender",
+    icon: Code2,
+    animation: "code",
+  },
+  {
+    number: "02",
+    title: "SEO & Growth",
+    description: "Improve your search visibility and help the right customers discover your business.",
+    image: "/seo-growth.png",
+    alt: "Arquentra SEO illustration showing search visibility and growth analytics",
+    className: "cream",
+    icon: Search,
+    animation: "growth",
+  },
+  {
+    number: "03",
+    title: "Content Management",
+    description: "Plan, create, and manage content that keeps your brand active and relevant.",
+    image: "/content-management.png",
+    alt: "Arquentra content management illustration showing a content planner and calendar",
+    className: "lavender",
+    icon: CalendarDays,
+    animation: "content",
+  },
+  {
+    number: "04",
+    title: "Social Media Management",
+    description: "Build a consistent social presence through thoughtful content and strategy.",
+    image: "/social-media-management.png",
+    alt: "Arquentra social media management illustration showing a social content workflow",
+    className: "cream",
+    icon: Share2,
+    animation: "social",
+  },
 ];
 
 const projects = [
-  { number: "01", name: "Seela Label", type: "Fashion / E-commerce", desc: "A considered digital storefront for a contemporary saree label.", color: "project-sage", label: "CONCEPT EXPERIENCE" },
-  { number: "02", name: "The Modern Edit", type: "Lifestyle / Retail", desc: "A minimal, editorial shopping experience built around discovery.", color: "project-sand", label: "CONCEPT EXPERIENCE" },
-  { number: "03", name: "Next Horizon", type: "Professional services", desc: "A confident online presence designed to make complex services clear.", color: "project-olive", label: "CREATIVE DIRECTION" },
+  {
+    name: "Seela Label",
+    category: "Fashion / E-commerce",
+    description: "A considered digital storefront concept for a contemporary saree label.",
+    tag: "CONCEPT PROJECT",
+    style: "project-lavender",
+    letter: "seela",
+  },
+  {
+    name: "The Modern Edit",
+    category: "Lifestyle / Retail",
+    description: "An editorial shopping experience concept built around product discovery.",
+    tag: "CONCEPT PROJECT",
+    style: "project-peach",
+    letter: "THE / EDIT",
+  },
+  {
+    name: "Next Horizon",
+    category: "Professional services",
+    description: "A clear, confident digital presence concept for a growing service business.",
+    tag: "CREATIVE CONCEPT",
+    style: "project-green",
+    letter: "NEXT—",
+  },
 ];
 
-const packages = [
-  { name: "Starter Website", price: "₹9,999", suffix: "one-time", desc: "A polished online home for a new or growing business.", features: ["Up to 5 pages", "Responsive design", "Contact / WhatsApp CTA", "Basic on-page SEO"], featured: false },
-  { name: "Business Website", price: "₹24,999", suffix: "one-time", desc: "A stronger digital presence for businesses ready to grow.", features: ["Up to 10 pages", "Custom visual direction", "Lead-generation sections", "SEO foundations", "Analytics setup"], featured: true },
-  { name: "Social Growth", price: "₹7,999", suffix: "per month", desc: "A more consistent and intentional social presence.", features: ["Monthly content plan", "Creative post designs", "Reel concepts", "Caption writing", "Monthly review"], featured: false },
-  { name: "Online Store", price: "₹39,999", suffix: "starting price", desc: "A product-led shopping experience built for conversion.", features: ["Storefront setup", "Product collections", "Mobile-first shopping", "Payment integration support", "Order-flow setup"], featured: false },
+const process = [
+  { number: "01", title: "Discover", text: "Understand your business, goals, customers and what success means to you." },
+  { number: "02", title: "Design", text: "Shape the visual direction and experience around your brand and audience." },
+  { number: "03", title: "Build", text: "Develop, test and refine a responsive solution that works in the real world." },
+  { number: "04", title: "Grow", text: "Launch with confidence, learn from results and keep improving over time." },
 ];
 
-const signals = [
-  { title: "Website opportunity", metric: "Clarity → conversion", detail: "A clearer offer and stronger calls to action can help turn more visitors into enquiries.", x: "72%", y: "25%" },
-  { title: "Search opportunity", metric: "Discovery → demand", detail: "A focused SEO foundation helps the right customers find your business over time.", x: "26%", y: "48%" },
-  { title: "Workflow opportunity", metric: "Manual → automated", detail: "Simple automations can reduce repetitive admin and make lead follow-up more consistent.", x: "62%", y: "73%" },
-];
+function WhatsAppLink({
+  children,
+  className = "",
+  message = "Hi ARQUENTRA, I'd like to discuss a project.",
+}: {
+  children: ReactNode;
+  className?: string;
+  message?: string;
+}) {
+  return (
+    <a
+      className={className}
+      href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`}
+      target="_blank"
+      rel="noreferrer"
+    >
+      {children}
+    </a>
+  );
+}
 
-function WhatsAppLink({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <a className={className} href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent("Hi ARQUENTRA, I'd like to discuss a project.")}`} target="_blank" rel="noreferrer">{children}</a>;
+function Reveal({
+  children,
+  className = "",
+  delay = 0,
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  const reduceMotion = useReducedMotion();
+  return (
+    <motion.div
+      className={className}
+      initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: reduceMotion ? 0 : 0.5, ease: "easeOut", delay }}
+    >
+      {children}
+    </motion.div>
+  );
 }
 
 export default function Home() {
-  const [activeSignal, setActiveSignal] = useState(0);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "", service: "Website development", message: "" });
-  const [sent, setSent] = useState(false);
-  const { scrollYProgress } = useScroll();
-  const progress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    business: "",
+    service: "Web Development",
+    message: "",
+  });
+  const [formOpened, setFormOpened] = useState(false);
 
-  function submitForm(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const message = `Hi ARQUENTRA!%0AName: ${encodeURIComponent(form.name)}%0AEmail: ${encodeURIComponent(form.email)}%0AService: ${encodeURIComponent(form.service)}%0AProject: ${encodeURIComponent(form.message)}`;
-    window.open(`https://wa.me/${WA_NUMBER}?text=${message}`, "_blank", "noopener,noreferrer");
-    setSent(true);
+  function submitForm(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const message = [
+      "Hi ARQUENTRA! I'd like to discuss a project.",
+      `Name: ${form.name}`,
+      `Email: ${form.email}`,
+      `Business: ${form.business || "Not specified"}`,
+      `Service: ${form.service}`,
+      `Project: ${form.message}`,
+    ].join("\n");
+    window.open(
+      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
+    setFormOpened(true);
   }
 
   return (
     <main>
-      <motion.div className="scroll-progress" style={{ scaleX: progress }} />
       <header className="site-header">
-        <a className="brand" href="#top" aria-label="ARQUENTRA home">
-          <span className="brand-mark">A<span>·</span></span>
-          <span className="brand-name">ARQUENTRA<span className="brand-dot">.</span><small>STRATEGY. TECHNOLOGY. GROWTH.</small></span>
-        </a>
-        <nav className={mobileOpen ? "nav-links nav-open" : "nav-links"}>
-          <a href="#services" onClick={() => setMobileOpen(false)}>What we do</a>
-          <a href="#work" onClick={() => setMobileOpen(false)}>Selected work</a>
-          <a href="#pricing" onClick={() => setMobileOpen(false)}>Packages</a>
-          <a href="#about" onClick={() => setMobileOpen(false)}>Our approach</a>
-        </nav>
-        <WhatsAppLink className="header-cta">Start a project <ArrowUpRight size={15} /></WhatsAppLink>
-        <button className="mobile-toggle" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle navigation">{mobileOpen ? <X /> : <Menu />}</button>
+        <div className="header-inner">
+          <a href="#home" className="brand" aria-label="Arquentra home">
+            <span className="brand-symbol" aria-hidden="true">✦</span>
+            <span className="brand-word">Arquentra<span>.</span></span>
+          </a>
+
+          <nav className={mobileMenuOpen ? "main-nav nav-open" : "main-nav"} aria-label="Main navigation">
+            <a href="#services" onClick={() => setMobileMenuOpen(false)}>Services</a>
+            <a href="#work" onClick={() => setMobileMenuOpen(false)}>Our Work</a>
+            <a href="#about" onClick={() => setMobileMenuOpen(false)}>About</a>
+            <a href="#contact" onClick={() => setMobileMenuOpen(false)}>Contact</a>
+          </nav>
+
+          <WhatsAppLink className="header-cta">Let&apos;s Talk <ArrowUpRight size={16} /></WhatsAppLink>
+          <button
+            type="button"
+            className="mobile-menu-button"
+            aria-label={mobileMenuOpen ? "Close navigation" : "Open navigation"}
+            aria-expanded={mobileMenuOpen}
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
       </header>
 
-      <section className="hero section-shell" id="top">
-        <div className="hero-copy">
-          <motion.div className="eyebrow" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6 }}>
-            <span className="eyebrow-dot" /> INDEPENDENT DIGITAL STUDIO <span className="eyebrow-line" />
-          </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7, delay: .08 }}>
-            Make your next<br />move <em>matter.</em>
-          </motion.h1>
-          <motion.p className="hero-lead" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7, delay: .18 }}>
-            We build thoughtful digital experiences that help ambitious businesses get noticed, earn trust, and grow.
-          </motion.p>
-          <motion.div className="hero-actions" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7, delay: .25 }}>
-            <WhatsAppLink className="button button-gold">Tell us what you’re building <ArrowUpRight size={17} /></WhatsAppLink>
-            <a className="text-link" href="#work">Explore our work <ArrowDownRight size={16} /></a>
-          </motion.div>
-          <div className="hero-note"><span className="note-rule" /> BUILT WITH INTENTION. DESIGNED FOR MOMENTUM.</div>
-        </div>
+     <section className="hero section-shell hero-image-only" id="home">
+  <Reveal className="hero-image-wrap">
+    <div className="hero-image-frame">
+      <Image
+        src="/arquentra-main.png"
+        alt="Arquentra digital solutions showcase featuring website design, mobile experiences, and digital growth"
+        width={1774}
+        height={887}
+        priority
+        sizes="(max-width: 760px) 100vw, 100vw"
+        className="hero-image"
+      />
+    </div>
+    <div className="hero-image-caption">
+      <span>STRATEGY × DESIGN × TECHNOLOGY</span>
+      <Sparkles size={16} />
+    </div>
+  </Reveal>
+</section>
 
-        <div className="hero-visual">
-          <div className="visual-topline"><span>ARQ / SIGNAL SYSTEM</span><span>01 — 03</span></div>
-          <div className="radar">
-            <div className="radar-ring ring-one" /><div className="radar-ring ring-two" /><div className="radar-ring ring-three" />
-            <div className="radar-cross cross-x" /><div className="radar-cross cross-y" />
-            <div className="radar-sweep" />
-            <div className="radar-center"><span>A</span><small>FIND YOUR<br />NEXT SIGNAL</small></div>
-            {signals.map((s, i) => <button key={s.title} className={`signal signal-${i} ${activeSignal === i ? "signal-active" : ""}`} style={{ left: s.x, top: s.y }} onClick={() => setActiveSignal(i)} aria-label={s.title}><span className="signal-pulse" /><span className="signal-label">{s.title}</span></button>)}
-            <span className="radar-coordinate coord-one">28° 36' N</span><span className="radar-coordinate coord-two">77° 12' E</span>
-          </div>
-          <div className="signal-card">
-            <div><span className="micro-label">SIGNAL DETECTED / 0{activeSignal + 1}</span><h3>{signals[activeSignal].title}</h3><p>{signals[activeSignal].detail}</p></div>
-            <div className="signal-card-icon"><ArrowUpRight size={20} /></div>
-          </div>
-          <div className="visual-foot"><span><span className="live-dot" /> SYSTEM ONLINE</span><span>HUMAN STRATEGY × DIGITAL CRAFT</span></div>
-        </div>
-        <div className="hero-index">01 / DIGITAL WITH DIRECTION</div>
-      </section>
-
-
-      <section className="showreel-section" aria-label="ARQUENTRA digital showreel">
-        <div className="section-shell showreel-inner">
-          <div className="showreel-copy">
-            <span className="eyebrow">A CLOSER LOOK / DIGITAL IN MOTION</span>
-            <h2>Ideas that move<br /><em>business forward.</em></h2>
-            <p>Web experiences, connected systems and digital details — brought together to make brands easier to discover and remember.</p>
-            <a className="text-link" href="#services">Explore what we do <ArrowDownRight size={16} /></a>
-          </div>
-          <div className="showreel-frame">
-            <video className="showreel-video" autoPlay muted loop playsInline preload="metadata" aria-label="Muted ARQUENTRA digital design showreel">
-              <source src="/arquentra-showreel.mp4" type="video/mp4" />
-              Your browser does not support the video element.
-            </video>
-            <div className="showreel-overlay-top"><span>ARQ / DIGITAL WORLDS</span><span>01 — LOOP</span></div>
-            <div className="showreel-overlay-bottom"><span><span className="live-dot" /> SOUND OFF · AUTOPLAY</span><span>DESIGN / TECHNOLOGY / EXPERIENCE</span></div>
-          </div>
+      <section className="intro-band">
+        <div className="section-shell intro-band-inner">
+          <span className="eyebrow">YOUR DIGITAL GROWTH PARTNER</span>
+          <p>Good digital work should look clear, feel effortless, and <em>move your business forward.</em></p>
+          <a href="#contact" aria-label="Start a project"><ArrowUpRight size={23} /></a>
         </div>
       </section>
 
-      <section className="intro-strip">
-        <div className="section-shell intro-inner"><span className="eyebrow">THE INTERNET IS CROWDED.</span><p>Being online is easy.<br /><em>Being remembered is the work.</em></p><ArrowDownRight className="intro-arrow" size={28} /></div>
+      <section className="section-shell section-block services-section" id="services">
+        <Reveal className="section-heading">
+          <div>
+            <span className="eyebrow">WHAT WE DO</span>
+            <h2>This is what <em>we do.</em></h2>
+          </div>
+          <p>Four connected services. One clear goal: help your business show up better online.</p>
+        </Reveal>
+        <div className="services-grid">
+          {services.map((service, index) => {
+            const Icon = service.icon;
+            return (
+              <Reveal className={`service-card ${service.className}`} key={service.number} delay={index * 0.06}>
+                <div className="service-card-top">
+                  <span className="service-number">{service.number} / SERVICE</span>
+                  <span className="service-icon"><Icon size={18} /></span>
+                </div>
+                <div className={`service-image service-image-${service.animation}`}>
+                  <Image
+                    src={service.image}
+                    alt={service.alt}
+                    width={1774}
+                    height={887}
+                    sizes="(max-width: 680px) 100vw, (max-width: 1000px) 50vw, 25vw"
+                    className="service-illustration"
+                  />
+                  <span className="image-spark image-spark-one" />
+                  <span className="image-spark image-spark-two" />
+                </div>
+                <div className="service-card-copy">
+                  <h3>{service.title}</h3>
+                  <p>{service.description}</p>
+                  <a href="#contact" className="service-link" onClick={() => setForm((current) => ({ ...current, service: service.title }))}>
+                    Explore service <ArrowUpRight size={17} />
+                  </a>
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
       </section>
 
-      <section className="section-shell section-block" id="services">
-        <div className="section-heading"><div><span className="eyebrow">01 / WHAT WE DO</span><h2>Good work.<br /><em>Clear outcomes.</em></h2></div><p>From the first click to the lasting relationship, we connect strategy, design and technology to move your business forward.</p></div>
-        <div className="services-grid">{services.map((service, i) => { const Icon = service.icon; return <motion.article className="service-card" key={service.no} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .2 }} transition={{ duration: .45, delay: i * .06 }}><div className="service-top"><span>{service.no}</span><Icon size={21} strokeWidth={1.5} /></div><h3>{service.title}</h3><p>{service.text}</p><div className="service-tags">{service.tags.map(tag => <span key={tag}>{tag}</span>)}</div><a href="#contact" className="card-arrow" aria-label={`Ask about ${service.title}`}><ArrowUpRight size={18} /></a></motion.article> })}</div>
+      <section className="work-section" id="work">
+        <div className="section-shell section-block">
+          <Reveal className="section-heading">
+            <div><span className="eyebrow">SELECTED DIRECTIONS</span><h2>Ideas made <em>visible.</em></h2></div>
+            <p>A few concept experiences showing how we approach digital brands. They are concepts, not client endorsements.</p>
+          </Reveal>
+          <div className="projects-grid">
+            {projects.map((project, index) => (
+              <Reveal key={project.name} className="project-card" delay={index * 0.07}>
+                <div className={`project-art ${project.style}`}>
+                  <span className="project-tag">{project.tag}</span>
+                  <span className="project-letter">{project.letter}</span>
+                  <span className="project-orbit" />
+                  <span className="project-art-footer">ARQUENTRA / DIGITAL CONCEPT</span>
+                </div>
+                <div className="project-details">
+                  <div><span className="project-category">{project.category}</span><h3>{project.name}</h3><p>{project.description}</p></div>
+                  <a href="#contact" aria-label={`Discuss a project like ${project.name}`}><ArrowUpRight size={19} /></a>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
       </section>
 
-      <section className="work-section" id="work"><div className="section-shell section-block">
-        <div className="section-heading"><div><span className="eyebrow">02 / SELECTED DIRECTIONS</span><h2>Ideas made<br /><em>visible.</em></h2></div><p>A few concept experiences that show how we think about digital brands. These are creative concepts, not client endorsements.</p></div>
-        <div className="projects-grid">{projects.map((p, i) => <motion.article className="project-card" key={p.number} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .2 }} transition={{ duration: .5, delay: i * .1 }}><div className={`project-art ${p.color}`}><span className="project-label">{p.label}</span><span className="project-number">{p.number}</span><div className="project-art-word">{i === 0 ? "seela" : i === 1 ? "THE / EDIT" : "NEXT—"}</div><div className="project-art-orbit" /><span className="project-art-caption">{i === 0 ? "DRESS YOUR STORY" : i === 1 ? "LESS, BUT BETTER" : "DESIGNED TO MOVE"}</span></div><div className="project-meta"><div><span className="micro-label">{p.type}</span><h3>{p.name}</h3><p>{p.desc}</p></div><a href="#contact" aria-label={`Discuss a project like ${p.name}`}><ArrowUpRight /></a></div></motion.article>)}</div>
-      </div></section>
-
-      <section className="section-shell section-block pricing-section" id="pricing">
-        <div className="section-heading"><div><span className="eyebrow">03 / CLEAR STARTING POINTS</span><h2>Good things start<br /><em>with a plan.</em></h2></div><p>These are indicative starting prices, not fixed quotes. We’ll confirm the scope, timeline and final price before work begins.</p></div>
-        <div className="pricing-grid">{packages.map((p, i) => <article className={`price-card ${p.featured ? "price-featured" : ""}`} key={p.name}><div className="price-top"><span>{p.name}</span>{p.featured && <span className="popular-label">MOST POPULAR</span>}</div><div className="price-amount">{p.price}<small> / {p.suffix}</small></div><p className="price-desc">{p.desc}</p><div className="price-divider" /><ul>{p.features.map(f => <li key={f}><Check size={15} />{f}</li>)}</ul><WhatsAppLink className={p.featured ? "button button-gold price-cta" : "button button-outline price-cta"}>Discuss this package <ArrowUpRight size={16} /></WhatsAppLink><span className="price-footnote">{i === 2 ? "Monthly retainer · scope agreed in advance" : "Final quote depends on project scope"}</span></article>)}</div>
+      <section className="process-section section-block">
+        <div className="section-shell">
+          <Reveal className="section-heading">
+            <div><span className="eyebrow">A SIMPLE PROCESS</span><h2>From first thought<br />to <em>forward motion.</em></h2></div>
+            <p>A clear, collaborative process keeps the work focused and makes the next step easier to understand.</p>
+          </Reveal>
+          <div className="process-grid">
+            {process.map((step, index) => (
+              <Reveal className="process-step" key={step.number} delay={index * 0.06}>
+                <span className="process-number">{step.number}</span>
+                <div className="process-rule"><span /></div>
+                <h3>{step.title}</h3>
+                <p>{step.text}</p>
+              </Reveal>
+            ))}
+          </div>
+        </div>
       </section>
 
-      <section className="manifesto" id="about"><div className="section-shell manifesto-inner"><span className="eyebrow">04 / OUR APPROACH</span><div className="manifesto-content"><h2>Less noise.<br />More <em>meaning.</em></h2><div><p>We believe digital should do more than look impressive. It should make your value easier to understand, your business easier to find, and the next step easier to take.</p><p>Small studio energy. Systems-level thinking. No unnecessary complexity.</p><WhatsAppLink className="text-link light-link">Let’s build something useful <ArrowUpRight size={16} /></WhatsAppLink></div></div><div className="manifesto-bottom"><span>STRATEGY BEFORE DECORATION</span><span>CLARITY BEFORE COMPLEXITY</span><span>PROGRESS OVER POSTURING</span></div></div></section>
-
-      <section className="section-shell contact-section section-block" id="contact"><div className="contact-copy"><span className="eyebrow">05 / YOUR NEXT MOVE</span><h2>Have a good<br /><em>one in mind?</em></h2><p>Tell us where you want to go. We’ll help you work out what it takes to get there.</p><div className="contact-details"><a href={`mailto:${EMAIL}`}><Send size={16} />{EMAIL}</a><WhatsAppLink><MessageCircle size={16} />+91 95675 55020</WhatsAppLink></div><div className="contact-stamp"><span>A</span><small>MAKE YOUR<br />NEXT MOVE<br />MATTER.</small></div></div>
-        <form className="contact-form" onSubmit={submitForm}><div className="form-heading"><span className="micro-label">PROJECT ENQUIRY / 001</span><span className="form-status"><span className="live-dot" /> OPEN FOR PROJECTS</span></div><label>Your name<input required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="What should we call you?" /></label><label>Email address<input required type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="you@company.com" /></label><label>What do you need?<select value={form.service} onChange={e => setForm({ ...form, service: e.target.value })}>{services.map(s => <option key={s.no}>{s.title}</option>)}<option>Something else</option></select></label><label>Tell us a little about it<textarea required rows={3} value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="The idea, the goal, the challenge..." /></label><button className="button button-gold form-submit" type="submit">{sent ? "Open WhatsApp to send enquiry" : "Send project enquiry"} <ArrowUpRight size={17} /></button><p className="form-note">This form opens WhatsApp with your details ready to send. Your enquiry is not submitted until you press Send in WhatsApp.</p></form>
+      <section className="about-section" id="about">
+        <div className="section-shell about-inner">
+          <Reveal className="about-mark"><span>✦</span><small>ARQUENTRA<br />DIGITAL STUDIO</small></Reveal>
+          <Reveal className="about-copy" delay={0.08}>
+            <span className="eyebrow">A LITTLE ABOUT US</span>
+            <h2>Digital, with<br /><em>direction.</em></h2>
+            <p>Arquentra helps businesses build and improve their digital presence through thoughtful web development, SEO, content and social media management. We keep the process collaborative, the design clear and the work focused on your goals.</p>
+            <WhatsAppLink className="button button-dark">Let&apos;s talk about your goals <ArrowUpRight size={17} /></WhatsAppLink>
+          </Reveal>
+        </div>
       </section>
 
-      <footer className="site-footer"><div className="section-shell footer-main"><a className="brand footer-brand" href="#top"><span className="brand-mark">A<span>·</span></span><span className="brand-name">ARQUENTRA<span className="brand-dot">.</span><small>STRATEGY. TECHNOLOGY. GROWTH.</small></span></a><p>Digital direction for businesses<br />ready to move forward.</p><div className="footer-links"><a href="#services">Services</a><a href="#work">Work</a><a href="#pricing">Packages</a><a href="#contact">Contact</a></div><WhatsAppLink className="footer-contact">Start a conversation <ArrowUpRight size={15} /></WhatsAppLink></div><div className="section-shell footer-bottom"><span>© ARQUENTRA STUDIO</span><span>INDEPENDENT BY DESIGN. INTENTIONAL BY NATURE.</span><a href="#top">BACK TO TOP ↑</a></div></footer>
-      <WhatsAppLink className="floating-whatsapp" ><MessageCircle size={20} /><span>Let’s talk</span></WhatsAppLink>
+      <section className="section-shell contact-section section-block" id="contact">
+        <Reveal className="contact-copy">
+          <span className="eyebrow">HAVE A PROJECT IN MIND?</span>
+          <h2>Let&apos;s make<br />something <em>work.</em></h2>
+          <p>Share a little about what you need. We&apos;ll take it from there.</p>
+          <div className="contact-details">
+            <a href={`mailto:${EMAIL}`}><Send size={16} />{EMAIL}</a>
+            <WhatsAppLink><MessageCircle size={16} />+91 95675 55020</WhatsAppLink>
+          </div>
+        </Reveal>
+        <Reveal className="contact-form-wrap" delay={0.08}>
+          <form className="contact-form" onSubmit={submitForm}>
+            <div className="form-title"><span>PROJECT ENQUIRY</span><span className="form-dot" /> OPEN FOR PROJECTS</div>
+            <div className="form-row">
+              <label>Your name<input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Name" autoComplete="name" /></label>
+              <label>Email address<input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="you@company.com" autoComplete="email" /></label>
+            </div>
+            <label>Business name <span className="optional-label">OPTIONAL</span><input value={form.business} onChange={(e) => setForm({ ...form, business: e.target.value })} placeholder="Your brand or company" autoComplete="organization" /></label>
+            <label>What do you need?<select value={form.service} onChange={(e) => setForm({ ...form, service: e.target.value })}>{services.map((service) => <option key={service.number}>{service.title}</option>)}<option>Other digital service</option></select></label>
+            <label>Tell us about the project<textarea required rows={3} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Your goals, timeline or ideas..." /></label>
+            <button className="button button-dark form-submit" type="submit">{formOpened ? "Open WhatsApp to send" : "Send project enquiry"} <ArrowUpRight size={18} /></button>
+            <p className="form-note">{formOpened ? "WhatsApp has opened with your details. Press Send there to submit your enquiry." : "Your details will be prepared in WhatsApp. You can review them before sending."}</p>
+          </form>
+        </Reveal>
+      </section>
+
+      <footer className="site-footer">
+        <div className="section-shell footer-main">
+          <a href="#home" className="brand footer-brand"><span className="brand-symbol" aria-hidden="true">✦</span><span className="brand-word">Arquentra<span>.</span></span></a>
+          <p>We build brands that grow.</p>
+          <nav aria-label="Footer navigation"><a href="#services">Services</a><a href="#work">Our Work</a><a href="#about">About</a><a href="#contact">Contact</a></nav>
+          <WhatsAppLink className="footer-cta">Start a project <ArrowRight size={16} /></WhatsAppLink>
+        </div>
+        <div className="section-shell footer-bottom"><span>© 2026 ARQUENTRA STUDIO</span><span>STRATEGY · DESIGN · DIGITAL GROWTH</span><a href="#home">BACK TO TOP ↑</a></div>
+      </footer>
+      <WhatsAppLink className="floating-whatsapp"><MessageCircle size={19} /><span>Let&apos;s talk</span></WhatsAppLink>
     </main>
   );
 }
