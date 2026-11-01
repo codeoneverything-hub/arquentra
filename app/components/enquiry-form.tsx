@@ -18,7 +18,7 @@ export default function EnquiryForm() {
     ].join("\n");
 
     trackMetaEvent("Lead", { service: String(data.get("service")) });
-    const url = `https://wa.me/919567555020?text=${encodeURIComponent(`Hi Arquentra, I'd like to discuss a project.\n\n${details}`)}`;
+    const url = `https://wa.me/917006127665?text=${encodeURIComponent(`Hi Arquentra, I'd like to discuss a project.\n\n${details}`)}`;
     window.open(url, "_blank", "noopener,noreferrer");
     event.currentTarget.reset();
   }

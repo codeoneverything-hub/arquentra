@@ -37,8 +37,8 @@ const organizationSchema = {
   "@type": "Organization",
   name: "Arquentra",
   url: siteUrl,
-  email: "comestsd@gmail.com",
-  telephone: "+91 95675 55020",
+  email: "arquentra@gmail.com",
+  telephone: "+91 70061 27665",
   areaServed: { "@type": "Country", name: "India" },
   description:
     "Independent digital creative and technology studio providing web design, e-commerce, social media, Meta Ads, SEO, creative content and AI automation.",

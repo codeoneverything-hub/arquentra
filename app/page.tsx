@@ -171,7 +171,7 @@ export default function Home() {
       <section className="contact-section" id="contact">
         <div className="page-wrap contact-inner">
           <div className="contact-copy"><span className="section-index">[ 06 / YOUR MOVE ]</span><Reveal><h2>Got an idea?<br /><span>Let&apos;s make it real.</span></h2></Reveal><p>Tell us where you want to go. We&apos;ll help you figure out the right way to get there.</p>
-            <div className="contact-links"><WhatsAppLink className="button button-lime">Say hello on WhatsApp</WhatsAppLink><a href="mailto:comestsd@gmail.com">comestsd@gmail.com <ArrowUpRight size={15} /></a><SocialProfileLink /></div>
+            <div className="contact-links"><WhatsAppLink className="button button-lime">Say hello on WhatsApp</WhatsAppLink><a href="mailto:arquentra@gmail.com">arquentra@gmail.com <ArrowUpRight size={15} /></a><SocialProfileLink /></div>
             <div className="contact-note"><span className="availability-dot" /> Usually reply within one working day</div>
           </div>
           <EnquiryForm />
