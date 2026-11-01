@@ -1,28 +1,28 @@
-# ARQUENTRA — Fieldnotes redesign
+# Arquentra — Digital Creative Studio
 
-Original redesign inspired by the reference website's technical/editorial language: numbered sections, oversized typography, a pointer-reactive terrain graphic, case-study field reports, service capability list, process and direct contact. It does not copy the reference site's exact branding or text.
+A mobile-first creative studio website built with Next.js App Router, TypeScript, Framer Motion and Lucide icons. The visual system pairs warm paper and forest green with a lime accent, editorial type and lightweight motion.
 
-## Apply
-Copy `app/page.tsx` and `app/globals.css` into `C:\Users\arnbb\arquentra\app\`.
-Keep existing `app/layout.tsx`, `package.json`, `next.config.ts`, and environment files.
+## Start locally
 
-Run:
-```powershell
-npm install framer-motion lucide-react
-npm run build
+```bash
+npm ci
 npm run dev
 ```
-Check `http://localhost:3000` on desktop and mobile.
 
-If the build passes:
-```powershell
-git add app/page.tsx app/globals.css
-git commit -m "Redesign ARQUENTRA with interactive editorial portfolio"
-git push origin main
+## Production checks
+
+```bash
+npm run lint
+npx tsc --noEmit
+npm run build
 ```
-Wait for Vercel deployment status Ready.
 
-Email: comestsd@gmail.com
-WhatsApp: +91 95675 55020
-Services: Web development, SEO & growth, content management, social media management.
-Seela Label and Chaala are explicitly labelled concept projects. The enquiry form opens WhatsApp with a prepared message; the visitor reviews it and presses Send.
+## Configuration
+
+- `NEXT_PUBLIC_SITE_URL` — canonical production URL. Defaults to `https://www.arquentra.in`.
+- `NEXT_PUBLIC_META_PIXEL_ID` — optional Meta Pixel ID. The integration stays inactive until configured.
+- `NEXT_PUBLIC_INSTAGRAM_URL` — optional Arquentra Instagram profile URL. No profile URL was present in the existing project, so none is guessed.
+
+The enquiry form opens WhatsApp at +91 95675 55020 with the visitor's answers prefilled; the visitor reviews and sends it. The email address is comestsd@gmail.com. The responsive hero uses the supplied portrait video on mobile and landscape video on desktop. Video playback respects the visitor's reduced-motion preference; the poster remains visible when motion is reduced.
+
+All work in “Experiments & Concepts” is self-initiated concept work. It does not represent client work, testimonials or business results.
