@@ -4,7 +4,9 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.arquentra.in";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: { userAgent: "*", allow: "/" },
+    rules: [
+      { userAgent: "*", allow: "/", disallow: ["/api/", "/concepts/*/demo"] },
+    ],
     sitemap: new URL("/sitemap.xml", siteUrl).toString(),
   };
 }

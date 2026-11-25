@@ -1,7 +1,6 @@
 ﻿import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   experimental: {
     agentFeedback: true,
   },
@@ -14,6 +13,18 @@ const nextConfig: NextConfig = {
         as: "*.css",
       },
     },
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/prep/privacy",
+        destination: "/prep/privacy/index.html",
+      },
+      {
+        source: "/prep/account-deletion",
+        destination: "/prep/account-deletion/index.html",
+      },
+    ];
   },
 };
 

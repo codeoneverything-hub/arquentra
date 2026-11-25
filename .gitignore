@@ -39,3 +39,20 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+!.env.example
+.env*
+
+# Local safety backup
+/_worktree-backup-*/
+.vercel
+
+# Local backups and deployment artifacts
+/_full-worktree-backup-*/
+/_seo-deploy-isolated/
+/.vercel-deploy-current/
+/.preview-reference/
+/campaign/
+*.log
+LIGHTHOUSE*.json
+LIGHTHOUSE*.md

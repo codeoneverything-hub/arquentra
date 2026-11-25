@@ -1,0 +1,14 @@
+.preview-reference/
+.next-local.*.log
+campaign/
+LIGHTHOUSE*.json
+LIGHTHOUSE*.md
+*.tsbuildinfo
+
+_full-worktree-backup-*/
+_worktree-backup-*/
+_seo-deploy-isolated/
+.vercel-deploy-current/
+.env
+.env.*
+*.log

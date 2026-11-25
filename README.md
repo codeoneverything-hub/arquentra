@@ -1,6 +1,6 @@
-# Arquentra — Digital Creative Studio
+# Arquentra
 
-A mobile-first creative studio website built with Next.js App Router, TypeScript, Framer Motion and Lucide icons. The visual system pairs warm paper and forest green with a lime accent, editorial type and lightweight motion.
+A mobile-first website for Arquentra's freelance website design and development service, focused on growing businesses. Built with Next.js App Router, TypeScript and CSS.
 
 ## Start locally
 
@@ -19,10 +19,10 @@ npm run build
 
 ## Configuration
 
-- `NEXT_PUBLIC_SITE_URL` — canonical production URL. Defaults to `https://www.arquentra.in`.
-- `NEXT_PUBLIC_META_PIXEL_ID` — optional Meta Pixel ID. The integration stays inactive until configured.
-- `NEXT_PUBLIC_INSTAGRAM_URL` — optional Arquentra Instagram profile URL. No profile URL was present in the existing project, so none is guessed.
+- `NEXT_PUBLIC_SITE_URL` — canonical URL; defaults to `https://www.arquentra.in`.
+- `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `ENQUIRY_TO_EMAIL` — optional email form delivery. Verify the sender domain with Resend first. Without them, the form provides a prepared email fallback.
+- `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` — optional Plausible analytics domain.
 
-The enquiry form opens WhatsApp at +91 70061 27665 with the visitor's answers prefilled; the visitor reviews and sends it. The email address is arquentra@gmail.com. The responsive hero uses the supplied portrait video on mobile and landscape video on desktop. Video playback respects the visitor's reduced-motion preference; the poster remains visible when motion is reduced.
+WhatsApp is the primary enquiry path at +91 70061 27665. Visitors review the prefilled message before sending. The contact email is arquentra@gmail.com.
 
-All work in “Experiments & Concepts” is self-initiated concept work. It does not represent client work, testimonials or business results.
+The website concepts are fictional self-initiated work, not client projects or proof of business results. See [PLACEHOLDERS.md](./PLACEHOLDERS.md) for real details needed to complete the profile and [CHANGELOG.md](./CHANGELOG.md) for this refresh.
